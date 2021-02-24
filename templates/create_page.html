@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+{%block content%}
+<div class="container">
+    <form action="{{url_for('create_page')}}" method='POST'>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Subdomain</label>
+          <input type="text" class="form-control" id="subdomain" name='subdomain' aria-describedby="subdomainHelp">
+          <div id="subdomainHelp" class="form-text">Your blog will be available at this subdomain.</div>
+        </div>
+        <div class="form-floating">
+            <textarea class="form-control" name='description' placeholder="Write a short description here" id="floatingTextarea2" style="height: 200px"></textarea>
+            <label for="floatingTextarea2">Description</label>
+          </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+</div>
+{%endblock%}

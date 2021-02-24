@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+{%block content%}
+<div class="container">
+    <form action="{{url_for('create_post')}}" method='POST'>
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="title" name='title' aria-describedby="titleHelp">
+          <div id="titleHelp" class="form-text">Enter a title for your post.</div>
+        </div>
+        <div class="form-floating">
+            <textarea class="form-control" name='content' placeholder="Enter Content" id="floatingTextarea2" style="height: 200px"></textarea>
+            <label for="floatingTextarea2">Content</label>
+          </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+</div>
+{%endblock content%}

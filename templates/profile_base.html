@@ -1,0 +1,9 @@
+{%extends 'base.html'%}
+{%block content%}
+<div class="container mt-5">
+    {% for post in posts %}
+    <h3>{{post.title}}</h3>
+    <p>{{post.content}}</p>
+    {%endfor%}
+</div>
+{%endblock content%}

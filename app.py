@@ -1,4 +1,7 @@
-ffrom authlib.integrations.flask_client import OAuth
+from flask import Flask,Blueprint,render_template,url_for,redirect,session,request
+from flask_sqlalchemy import SQLAlchemy
+from authlib.integrations.flask_client import OAuth
+from flask_login import LoginManager,UserMixin,login_user,login_required,current_user,logout_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'random_secret'
@@ -56,9 +59,49 @@ class Post(db.Model):
     content = db.Column(db.String)
     page_id = db.Column(db.Integer,db.ForeignKey('page.id'))
 
+
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html',current_user=current_user)
+
+@app.route('/create_page',methods=['POST','GET'])
+@login_required
+def create_page():
+    if request.method == 'POST':
+        subdomain = request.form['subdomain']
+        description = request.form['description']
+        user = User.query.filter_by(email=current_user.email).first()
+        if not user.registered_author:
+            if not Page.query.filter_by(subdomain=subdomain).first():
+                new_page = Page(subdomain=subdomain,description=description,user=user)
+                db.session.add(new_page)
+                user.registered_author = True
+                db.session.commit()
+                return "Page Created"
+            else:
+                return "Username Already Exists"
+        else:
+            return "You already own a page."
+
+    return render_template('create_page.html')
+
+@app.route('/create_post',methods=['POST','GET'])
+@login_required
+def create_post():
+    if request.method == "POST":
+        user = User.query.filter_by(email=current_user.email).first()
+        if user.registered_author == True:
+            page = user.page
+            title = request.form['title']
+            content = request.form['content']
+            new_post = Post(title=title,content=content,page=page)
+            db.session.add(new_post)
+            db.session.commit()
+            return "Post Created"
+        else:
+            return "You need a post before you can post."
+    return render_template("create_post.html")
 
 auth = Blueprint('auth',__name__,url_prefix='/auth')
 
@@ -75,12 +118,17 @@ def authorize():
     token = google.authorize_access_token()
     resp = google.get('userinfo')
     user_info = resp.json()
-
+    user = User.query.filter_by(email=user_info['email']).first()
+    # do something with the token and profile
     if user:
         login_user(user)
         return redirect(url_for('index'))
     else:
         print(user_info)
+        new_user = User(email=user_info['email'],name=user_info['name'],registered_author=False)
+        db.session.add(new_user)
+        db.session.commit()
+        login_user(new_user)
         return redirect(url_for('index'))
 
 @auth.route('/logout')

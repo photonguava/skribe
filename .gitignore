@@ -1,1 +1,4 @@
 google.json
+site.db
+__pycache__/
+venv/
