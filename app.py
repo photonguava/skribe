@@ -1,5 +1,4 @@
-from flask import Flask,Blueprint,render_template,url_for,redirect,session,request
-from authlib.integrations.flask_client import OAuth
+ffrom authlib.integrations.flask_client import OAuth
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'random_secret'
@@ -24,6 +23,38 @@ google = oauth.register(
     client_kwargs={'scope': 'openid email profile'},
 )
 
+subscriptions = db.Table('subscriptions',
+    db.Column('user_id',db.Integer,db.ForeignKey('user.id')),
+    db.Column('page_id',db.Integer,db.ForeignKey('page.id'))
+)
+
+class User(UserMixin,db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    email = db.Column(db.String(128))
+    name = db.Column(db.String(128))
+    registered_author = db.Column(db.Boolean)
+    page = db.relationship('Page',backref='user',uselist=False)
+    subscribed_to = db.relationship('Page',secondary=subscriptions,backref=db.backref('subscribers'))
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class Page(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    subdomain=db.Column(db.String(64))
+    description = db.Column(db.String(360))
+    banner = db.Column(db.String)
+    db.pattern = db.Column(db.String)
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
+    posts = db.relationship('Post',backref='page')
+
+
+class Post(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    title = db.Column(db.String(128))
+    content = db.Column(db.String)
+    page_id = db.Column(db.Integer,db.ForeignKey('page.id'))
 
 @app.route('/')
 def index():
