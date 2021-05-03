@@ -2,11 +2,15 @@ from flask import Flask,Blueprint,render_template,url_for,redirect,session,reque
 from flask_sqlalchemy import SQLAlchemy
 from authlib.integrations.flask_client import OAuth
 from flask_login import LoginManager,UserMixin,login_user,login_required,current_user,logout_user
+from configparser import SafeConfigParser
+
+parser = SafeConfigParser()
+parser.read('site.ini')
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'random_secret'
-app.config['SERVER_NAME'] = 'localhost:5000'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SECRET_KEY'] = parser.read('app','SECRET_KEY')
+app.config['SERVER_NAME'] = parser.read('google','SERVER_NAME')
+app.config['SQLALCHEMY_DATABASE_URI'] = parser.read('google','SQLALCHEMY_DATABASE_URI')
 
 db = SQLAlchemy(app)
 login_manager = LoginManager()
@@ -15,8 +19,8 @@ login_manager.init_app(app)
 oauth = OAuth(app)
 google = oauth.register(
     name='google',
-    client_id="",
-    client_secret="",
+    client_id=parser.read('google','client_id'),
+    client_secret=parser.read('google','client_secret'),
     access_token_url='https://accounts.google.com/o/oauth2/token',
     access_token_params=None,
     authorize_url='https://accounts.google.com/o/oauth2/auth',
