@@ -48,7 +48,17 @@ For the readers, it curates a list of the latest articles from the writers they 
 ## 👀 Our Mission <a name = "mission"></a>
 Connect world's students and help them share knowledge easily and grow.
 
-## 🚀 Future Scope <a name = "future_scope"></a>
+## 🚀 Product Roadmap <a name = "roadmap"></a>
+
+ * [x] Login / Signup Functionality
+ * [x] Add Post
+ * [x] Profile Page
+ * [ ] Like Post
+ * [ ] Social Sharing
+ * [ ] User Feed
+ * [ ] Views Count
+ * [ ] Membership Badges
+
 
 ## ⛏️ Built With <a name = "tech_stack"></a>
 
