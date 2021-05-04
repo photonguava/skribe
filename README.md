@@ -36,7 +36,7 @@
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgments)
 
-## 🧐 Problem Statement: #thispandemic <a name = "problem_statement"></a>
+## 🧐 Problem Statement <a name = "problem_statement"></a>
 Publishing domain-specific, longform articles that revolve around a student’s area of expertise, thus allowing them to connect and network with like-minded individuals. 
 
 ## 💡 Idea / Solution <a name = "idea"></a>
