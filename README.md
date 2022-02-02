@@ -80,7 +80,7 @@ For Deployment
 
                   
 ## ✍️ Authors <a name = "authors"></a>
--[abhnvx](https://github.com/abhnvx) 
+- [@abhnvx](https://github.com/abhnvx) 
 - [@photonguava](https://github.com/photonguava)
 - [@charitha-madala](https://github.com/charitha-madala)
 - [@hotwings-icarus](https://github.com/hotwings-icarus)
